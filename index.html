@@ -64,7 +64,8 @@
     opacity:0;animation:fadeUp .9s .15s forwards;
   }
   .monogram .bar{display:inline-block;width:1px;height:.9em;background:var(--orange);margin:0 .22em;vertical-align:-.12em;}
-  .monogram img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
+  .monogram img{width:74%;height:74%;object-fit:contain;}
+  .monogram.has-img{width:140px;height:140px;}
   .splash-eyebrow{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--muted);margin:26px 0 14px;opacity:0;animation:fadeUp .9s .3s forwards;}
   .splash-names{
     font-family:'Pinyon Script',cursive;
@@ -222,7 +223,7 @@
   /* FOOTER */
   footer{padding:64px 22px 46px;text-align:center;background:var(--cream);position:relative;}
   footer::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:220px;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);}
-  footer .monogram{opacity:1;animation:none;width:84px;height:84px;font-size:32px;margin:0 auto 18px;}
+  footer .monogram,footer .monogram.has-img{opacity:1;animation:none;width:96px;height:96px;font-size:32px;margin:0 auto 18px;}
   .footer-names{font-family:'Pinyon Script',cursive;font-size:56px;color:var(--orange-deep);line-height:1.05;}
   .footer-note{font-size:11px;letter-spacing:.22em;color:var(--muted);}
 
@@ -538,7 +539,7 @@
 const CONFIG = {
   noivos: 'Bruna & Livio',
   iniciais: ['B', 'L'],
-  monograma: '',            // caminho da imagem do monograma (ex.: 'fotos/monograma.png'). Vazio = usa as iniciais.
+  monograma: 'fotos/monograma.png', // caminho da imagem do monograma. Vazio = usa as iniciais.
 
   dataEvento: '2026-12-26T15:00:00-03:00',
   dataTexto:  '26 de Dezembro de 2026',
@@ -659,6 +660,7 @@ document.title = CONFIG.noivos + ' — Casamento';
     ? `<img src="${esc(CONFIG.monograma)}" alt="Monograma ${esc(CONFIG.noivos)}">`
     : `${esc(CONFIG.iniciais[0])}<span class="bar"></span>${esc(CONFIG.iniciais[1])}`;
   txt('splashMono', html); txt('footerMono', html);
+  if(CONFIG.monograma) ['splashMono','footerMono'].forEach(id=>$(id).classList.add('has-img'));
 })();
 
 // Google Agenda
