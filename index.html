@@ -206,9 +206,6 @@
   .rsvp-input{width:100%;background:rgba(255,248,239,.08);border:1px solid rgba(249,184,134,.3);border-radius:10px;padding:14px 16px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:19px;text-align:center;outline:none;transition:border-color .2s,background .2s;}
   .rsvp-input::placeholder{color:rgba(255,248,239,.4);font-style:italic;}
   .rsvp-input:focus{border-color:var(--orange-soft);background:rgba(255,248,239,.12);}
-  select.rsvp-input{appearance:none;-webkit-appearance:none;cursor:pointer;}
-  select.rsvp-input option{color:var(--ink);}
-  textarea.rsvp-input{font-size:17px;resize:vertical;min-height:84px;}
   .choice{display:flex;gap:10px;}
   .choice label{flex:1;cursor:pointer;}
   .choice input{position:absolute;opacity:0;pointer-events:none;}
@@ -459,20 +456,6 @@
             <label><input type="radio" name="vai" value="sim" checked><span>Sim, estarei lá!</span></label>
             <label><input type="radio" name="vai" value="nao"><span>Não poderei ir</span></label>
           </div>
-        </div>
-        <div class="field" id="qtdField">
-          <label for="rsvpQtd">Quantas pessoas (incluindo você)</label>
-          <select class="rsvp-input" id="rsvpQtd">
-            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="rsvpNomes" id="rsvpNomesLbl">Nome dos acompanhantes</label>
-          <input class="rsvp-input" id="rsvpNomes" type="text" placeholder="Somente os que estão no convite">
-        </div>
-        <div class="field">
-          <label for="rsvpMsg">Recado para os noivos (opcional)</label>
-          <textarea class="rsvp-input" id="rsvpMsg" placeholder="Deixe seu carinho 💌"></textarea>
         </div>
 
         <button class="wa-btn" type="submit">
@@ -807,28 +790,19 @@ function startCountdown(){
 
 // ─── RSVP → WhatsApp ───
 (function(){
-  const form=$('rsvpForm'), qtd=$('qtdField'), nomes=$('rsvpNomes'), out=$('rsvpResult');
-  function sync(){
-    const vai=form.vai.value==='sim';
-    qtd.style.display=vai?'':'none';
-    nomes.parentElement.style.display=(vai && Number($('rsvpQtd').value)>1)?'':'none';
-  }
-  form.addEventListener('change',sync); sync();
+  const form=$('rsvpForm'), out=$('rsvpResult');
   form.addEventListener('submit',function(e){
     e.preventDefault();
     const nome=$('rsvpNome').value.trim();
     if(!nome){ out.textContent='Por favor, escreva seu nome. 🧡'; $('rsvpNome').focus(); return; }
     if(!CONFIG.whatsapp){ out.textContent='O WhatsApp dos noivos ainda não foi configurado.'; return; }
     const vai=form.vai.value==='sim';
-    const n=Number($('rsvpQtd').value), acomp=nomes.value.trim(), recado=$('rsvpMsg').value.trim();
     let msg=`Olá, ${CONFIG.noivos.replace('&','e')}! 🧡\n\n`;
     if(vai){
-      msg+=`✅ *Confirmo presença* no casamento de vocês!\n👤 Nome: ${nome}\n👥 Total de pessoas: ${n}`;
-      if(n>1&&acomp) msg+=`\n🧾 Acompanhantes: ${acomp}`;
+      msg+=`✅ *Confirmo presença* no casamento de vocês!\n👤 Nome: ${nome}`;
     }else{
       msg+=`😢 Infelizmente *não poderei comparecer* ao casamento.\n👤 Nome: ${nome}`;
     }
-    if(recado) msg+=`\n\n💌 Recado: ${recado}`;
     window.open('https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(msg),'_blank','noopener');
     out.textContent=vai?'Obrigado! Agora é só enviar a mensagem no WhatsApp. 🎉':'Obrigado por avisar! Envie a mensagem no WhatsApp. 🧡';
   });
